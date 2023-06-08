@@ -1,15 +1,22 @@
-from pages.base import WebPage
-from pages.elements import WebElement
+from .base_page import BasePage
+from .locators import AuthLocators
 
+import os, time
 
-class AuthPage(WebPage):
+class AuthPage(BasePage):
+    def __init__(self,driver,timeout=10):
+        super().__init__(driver, timeout)
+        url = os.getenv("LOGIN_URL") or "https://petfriends.skillfactory.ru/login"
+        driver.get(url)
+        self.email = driver.find_element(*AuthLocators.AUTH_EMAIL)
+        self.passw = driver.find_element(*AuthLocators.AUTH_PASS)
+        self.btn = driver.find_element(*AuthLocators.AUTH_BTH)
+        time.sleep(3)
 
-    def __init__(self, web_driver, url=''):
-        url = 'http://petfriends1.herokuapp.com/login'
-        super().__init__(web_driver, url)
+    def enter_email(self, value):
+        self.email.send_keys(value)
 
-    email = WebElement(id='email')
-
-    password = WebElement(id='pass')
-
-    btn = WebElement(class_name='btn.btn-success')
+    def enter_pass(self, value):
+        self.passw.send_keys(value)
+    def btn_click(self):
+        self.btn_click()
